@@ -16,11 +16,19 @@ class _ChatScreenState extends State<ChatScreen> {
   final _auth = FirebaseAuth.instance;
   final messageController = TextEditingController();
   late String messageText;
+  late ScrollController _scrollController;
 
   @override
   void initState() {
     getCurrentUser();
+    _scrollController = ScrollController();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
 
   void getCurrentUser() {
@@ -56,7 +64,7 @@ class _ChatScreenState extends State<ChatScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            const MessagesStream(),
+            MessagesStream(scrollController: _scrollController),
             Container(
               decoration: kMessageContainerDecoration,
               child: Row(
@@ -75,6 +83,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       _store.collection('messages').add({
                         'sender': loggedInUser.email,
                         'text': messageController.text,
+                        'timestamp': FieldValue.serverTimestamp(),
                       });
 
                       messageController.clear();
@@ -95,12 +104,14 @@ class _ChatScreenState extends State<ChatScreen> {
 }
 
 class MessagesStream extends StatelessWidget {
-  const MessagesStream({super.key});
+  final ScrollController scrollController; // Add scrollController parameter
+
+  const MessagesStream({super.key, required this.scrollController});
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-      stream: _store.collection("messages").snapshots(),
+      stream: _store.collection("messages").orderBy('timestamp').snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return const Center(
@@ -112,14 +123,26 @@ class MessagesStream extends StatelessWidget {
         List<MessageBubble> messageBubbles = [];
         for (var message in messages) {
           final messageBubble = MessageBubble(
+            key: ValueKey(message.id),
             sender: message['sender'],
             text: message['text'],
             isMe: loggedInUser.email == message['sender'],
           );
           messageBubbles.add(messageBubble);
         }
+
+        // Scroll to the bottom when new messages arrive
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          scrollController.animateTo(
+            scrollController.position.minScrollExtent,
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeOut,
+          );
+        });
+        
         return Expanded(
           child: ListView(
+              controller: scrollController,
               reverse: true,
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
               children: messageBubbles),
