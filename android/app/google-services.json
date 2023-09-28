@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "134270156894",
+    "project_id": "flash-chat-b9fc8",
+    "storage_bucket": "flash-chat-b9fc8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:134270156894:android:781203514e28ebf308b4cf",
+        "android_client_info": {
+          "package_name": "co.TommyAnie.flash_chat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "134270156894-kf8b78n0ctuju44jpjotls2h2eblv8cd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCxsQiTaeR73Y506C-pvqq_f5u_7UZO-wI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "134270156894-kf8b78n0ctuju44jpjotls2h2eblv8cd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
