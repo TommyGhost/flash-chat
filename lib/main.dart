@@ -14,21 +14,23 @@ Future<void> main() async {
 }
 
 class FlashChat extends StatelessWidget {
+  const FlashChat({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData.dark().copyWith(
-        textTheme: TextTheme(
+        textTheme: const TextTheme(
           bodyLarge: TextStyle(color: Colors.black54),
         ),
       ),
       initialRoute: WelcomeScreen.id, // Set the initial route
       routes: {
         WelcomeScreen.id: (context) => WelcomeScreen(), // Define the home route
-        LoginScreen.id: (context) => LoginScreen(), // Define a login route
+        LoginScreen.id: (context) => const LoginScreen(), // Define a login route
         RegistrationScreen.id: (context) =>
-            RegistrationScreen(), // Define a registration route
+            const RegistrationScreen(), // Define a registration route
         ChatScreen.id: (context) => ChatScreen(), // Define a chat screen
       },
     );
